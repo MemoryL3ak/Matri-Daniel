@@ -772,6 +772,13 @@ ul, ol { margin: 0; padding: 0; }
   line-height: 1.5;
   color: var(--verde);
 }
+.rsvp__exito-estado {
+  margin: -.4rem 0 0;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
 .rsvp__limite {
   margin: 1.4rem 0 0;
   font-size: .72rem;

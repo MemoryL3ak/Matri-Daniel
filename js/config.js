@@ -20,7 +20,7 @@ window.BODA = {
   // Formato: AAAA-MM-DDTHH:MM:SS seguido del desfase horario de Chile:
   //   -03:00  → horario de verano (septiembre a abril aprox.)
   //   -04:00  → horario de invierno (abril a septiembre aprox.)
-  fechaISO: "2027-03-20T17:00:00-03:00",
+  fechaISO: "2026-12-26T17:00:00-03:00",   // ⚠ hora por confirmar
   zonaHoraria: "America/Santiago",
   duracionHoras: 8,               // para el evento de calendario (.ics / Google)
 
@@ -32,31 +32,26 @@ window.BODA = {
   // Si la ceremonia y la celebración son en el mismo lugar, deja
   // `celebracion: null` y se mostrará una sola tarjeta.
   ceremonia: {
-    titulo: "Ceremonia",
-    hora: "17:00",
-    lugar: "Parroquia San Francisco de Asís",
-    direccion: "Av. Libertador Bernardo O'Higgins 834, Santiago",
-    nota: "Te pedimos llegar 15 minutos antes para comenzar puntualmente.",
+    titulo: "Ceremonia y celebración",
+    hora: "17:00",                          // ⚠ hora por confirmar
+    lugar: "Centro de Eventos La Casita de Cuentos",
+    direccion: "Los Guindos 1575, Parcela 25, Buin",
+    nota: "Te pedimos llegar 15 minutos antes para comenzar puntualmente. Hay estacionamiento dentro del recinto.",
     // Opcional: pega aquí el enlace "Compartir" de Google Maps si quieres
     // apuntar a un punto exacto. Si lo dejas vacío se usa la dirección.
     mapsUrl: "",
   },
-  celebracion: {
-    titulo: "Celebración",
-    hora: "19:30",
-    lugar: "Centro de Eventos Los Nogales",
-    direccion: "Camino Los Nogales 1250, Pirque",
-    nota: "Estacionamiento disponible dentro del recinto.",
-    mapsUrl: "",
-  },
+  // Ceremonia y celebración son en el mismo lugar: se muestra una sola tarjeta.
+  celebracion: null,
 
   /* --------------------------------------------------------- Itinerario */
   // Iconos disponibles: anillos · copa · cena · musica · pin · reloj
   itinerario: [
+    // ⚠ Horas de referencia, por confirmar con los novios.
     { hora: "17:00", titulo: "Ceremonia",          desc: "Nos damos el sí frente a quienes más queremos.", icono: "anillos" },
-    { hora: "19:30", titulo: "Recepción y cóctel", desc: "Brindis de bienvenida en los jardines.",          icono: "copa" },
-    { hora: "21:00", titulo: "Cena",               desc: "Compartimos la mesa y los discursos.",            icono: "cena" },
-    { hora: "23:00", titulo: "Fiesta",             desc: "¡A bailar hasta que el cuerpo aguante!",         icono: "musica" },
+    { hora: "18:00", titulo: "Cóctel",             desc: "Brindis de bienvenida en los jardines.",          icono: "copa" },
+    { hora: "20:00", titulo: "Cena",               desc: "Compartimos la mesa y los discursos.",            icono: "cena" },
+    { hora: "22:00", titulo: "Fiesta",             desc: "¡A bailar hasta que el cuerpo aguante!",         icono: "musica" },
   ],
 
   /* --------------------------------------------------------- Dress code */
@@ -71,27 +66,29 @@ window.BODA = {
   regalo: {
     activo: true,
     mensaje: "Tu presencia es nuestro mejor regalo. Pero si además deseas hacernos un presente, puedes hacerlo mediante una transferencia a la siguiente cuenta:",
-    titular: "Daniel Pérez González",
-    rut: "12.345.678-9",
-    banco: "Banco de Chile",
+    titular: "Daniel Hidalgo",
+    rut: "18.360.825-8",
+    banco: "Banco Bci",
     tipoCuenta: "Cuenta Corriente",
-    numeroCuenta: "00-123-45678-90",
-    email: "daniel.macarena@correo.cl",
+    numeroCuenta: "61667161",
+    email: "dehidalgo@uc.cl",
     gracias: "¡Gracias de corazón por acompañarnos!",
   },
 
   /* ------------------------------------------------- Confirmación (RSVP) */
   confirmacion: {
     activo: true,
-    fechaLimite: "2027-02-20",             // AAAA-MM-DD
+    fechaLimite: "2026-12-05",             // AAAA-MM-DD · ⚠ por confirmar
     // URL de la aplicación web de Google Apps Script que escribe en tu Google Sheet.
     // Sigue los pasos de README.md ("Confirmaciones en Google Sheets"). Termina en /exec.
     // Mientras esté vacía, el formulario avisará que aún no está conectado.
-    endpoint: "",
+    endpoint: "https://script.google.com/macros/s/AKfycbw7N__mpSEBhohdsdlf8ZUFyaBo5I4pFUOqSUNHhFxVzIqB7Xg3byh2rhd9TfB9N7ge/exec",
+    // Solo como referencia: planilla donde quedan las confirmaciones (no la usa el sitio).
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1anfGP-TPqsR7KoyffS252epXb-ps6txWp3cFjpom8t0/edit",
     texto: "Nos ayudaría mucho saber si puedes acompañarnos. Escribe tu nombre y envía tu confirmación antes de la fecha límite.",
     etiquetaNombre: "Tu nombre y apellido",
     placeholder: "Ej: María José Soto",
-    exito: "¡Gracias, {nombre}! Tu confirmación quedó registrada. Nos vemos en el gran día.",
+    exito: "¡Gracias, {nombre}! Nos hace muy felices contar contigo. Nos vemos en el gran día.",
   },
 
   /* ---------------------------------------------------------------- Pie */
