@@ -396,6 +396,8 @@ ul, ol { margin: 0; padding: 0; }
   border: 1px solid color-mix(in srgb, var(--oro) 45%, transparent);
   background: color-mix(in srgb, var(--verde-2) 55%, transparent);
 }
+/* Aísla cada casilla: cuando cambia un número, el navegador redibuja solo esa casilla */
+.cuenta__item { contain: layout paint; }
 .cuenta__item::before {
   content: "";
   position: absolute;

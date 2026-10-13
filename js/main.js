@@ -57,27 +57,48 @@
     grid: $('#cuentaGrid'), hoy: $('#cuentaHoy'), pre: $('.cuenta__pre'),
   };
   const dos = (n) => String(n).padStart(2, '0');
+  // Solo escribe si el número cambió: en Safari cada cambio de texto obliga a
+  // recalcular la página completa, así que no reescribimos días/horas cada segundo.
+  const poner = (el, v) => { if (el.textContent !== v) el.textContent = v; };
 
+  let timer = null;
+  let terminado = false;
   function tick() {
-    if (!fechaValida) return;
+    if (!fechaValida || terminado) return;
     const diff = fecha.getTime() - Date.now();
     if (diff <= 0) {
+      terminado = true;
       cd.grid.hidden = true;
       cd.pre.hidden = true;
       cd.hoy.hidden = false;
       const pasado = Date.now() - fecha.getTime() > 36 * 3600 * 1000;
       cd.hoy.textContent = pasado ? '¡Ya nos casamos! Gracias por acompañarnos.' : '¡Hoy es el gran día!';
-      clearInterval(timer);
+      detenerReloj();
       return;
     }
     const s = Math.floor(diff / 1000);
-    cd.dias.textContent  = dos(Math.floor(s / 86400));
-    cd.horas.textContent = dos(Math.floor((s % 86400) / 3600));
-    cd.min.textContent   = dos(Math.floor((s % 3600) / 60));
-    cd.seg.textContent   = dos(s % 60);
+    poner(cd.dias,  dos(Math.floor(s / 86400)));
+    poner(cd.horas, dos(Math.floor((s % 86400) / 3600)));
+    poner(cd.min,   dos(Math.floor((s % 3600) / 60)));
+    poner(cd.seg,   dos(s % 60));
   }
-  const timer = setInterval(tick, 1000);
-  tick();
+  function iniciarReloj() { if (timer === null && fechaValida && !terminado) { tick(); timer = setInterval(tick, 1000); } }
+  function detenerReloj() { if (timer !== null) { clearInterval(timer); timer = null; } }
+
+  // El reloj corre solo mientras está en pantalla y la pestaña está abierta.
+  let relojVisible = true;
+  const ajustarReloj = () => (relojVisible && !document.hidden) ? iniciarReloj() : detenerReloj();
+  if ('IntersectionObserver' in window) {
+    relojVisible = false;
+    new IntersectionObserver((entradas) => {
+      // Cuenta como visible solo si de verdad asoma en pantalla (no basta con tocar el borde)
+      relojVisible = entradas.some(en => en.isIntersecting && en.intersectionRatio > 0);
+      ajustarReloj();
+    }, { threshold: [0, 0.01, 0.1] }).observe($('#cuenta'));
+  }
+  document.addEventListener('visibilitychange', ajustarReloj);
+  tick();           // deja los números correctos desde el inicio
+  ajustarReloj();
 
   /* --------------------------------------------------- Calendarios */
   const utcCompacto = (d) => d.toISOString().replace(/[-:]|\.\d{3}/g, '');
