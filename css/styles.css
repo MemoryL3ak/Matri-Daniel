@@ -145,9 +145,7 @@ ul, ol { margin: 0; padding: 0; }
   align-items: center;
   justify-content: space-between;
   padding: .8rem var(--gutter);
-  background: color-mix(in srgb, var(--marfil) 88%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(246, 240, 230, .97);
   border-bottom: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   transform: translateY(-110%);
   transition: transform .45s cubic-bezier(.2, .7, .2, 1);
@@ -348,16 +346,17 @@ ul, ol { margin: 0; padding: 0; }
   border-radius: 50%;
   z-index: 1;
 }
-.hero__scroll svg { width: 18px; height: 18px; animation: rebote 2.2s ease-in-out infinite; }
+/* Rebota 3 veces y se detiene: una animación infinita mantiene al navegador redibujando sin parar */
+.hero__scroll svg { width: 18px; height: 18px; animation: rebote 2.2s ease-in-out 1.2s 3 both; }
 @keyframes rebote { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 
 /* Entrada del hero */
-.anim { opacity: 0; transform: translateY(18px); animation: entrar 1s cubic-bezier(.2, .7, .2, 1) forwards; }
-.anim-1 { animation-delay: .15s; }
-.anim-2 { animation-delay: .35s; }
-.anim-3 { animation-delay: .65s; }
-.anim-4 { animation-delay: .9s; }
-.anim-5 { animation-delay: 1.3s; }
+.anim { opacity: 0; transform: translateY(14px); animation: entrar .7s cubic-bezier(.2, .7, .2, 1) forwards; }
+.anim-1 { animation-delay: .05s; }
+.anim-2 { animation-delay: .15s; }
+.anim-3 { animation-delay: .25s; }
+.anim-4 { animation-delay: .35s; }
+.anim-5 { animation-delay: .5s; }
 @keyframes entrar { to { opacity: 1; transform: none; } }
 
 /* ------------------------------------------------------ Cuenta regresiva */
@@ -553,7 +552,6 @@ ul, ol { margin: 0; padding: 0; }
   height: clamp(280px, 45vw, 400px);
   border: 0;
   display: block;
-  filter: sepia(.25) saturate(.85) contrast(.98);
 }
 
 /* ---------------------------------------------------------- Itinerario */
@@ -969,7 +967,7 @@ ul, ol { margin: 0; padding: 0; }
 .toast.ver { opacity: 1; transform: translate(-50%, 0); }
 
 /* -------------------------------------------------------------- Reveal */
-.reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); }
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); }
 .reveal.visto { opacity: 1; transform: none; }
 
 /* -------------------------------------------------------- Accesibilidad */

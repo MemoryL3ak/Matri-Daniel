@@ -149,6 +149,7 @@
 
   const tabs = $('#mapaTabs');
   const frame = $('#mapaFrame');
+  let mapaCargado = false;
   if (lugares.length === 0) {
     $('#mapaWrap').hidden = true;
   } else {
@@ -159,14 +160,29 @@
       tabs.addEventListener('click', (e) => {
         const b = e.target.closest('.mapa__tab'); if (!b) return;
         $$('.mapa__tab', tabs).forEach(t => t.setAttribute('aria-selected', String(t === b)));
+        mapaCargado = true;
         frame.src = urlEmbed(lugares[+b.dataset.i]);
         frame.title = `Mapa · ${lugares[+b.dataset.i].lugar}`;
       });
     } else {
       tabs.hidden = true;
     }
-    frame.src = urlEmbed(lugares[0]);
     frame.title = `Mapa · ${lugares[0].lugar}`;
+    // El mapa de Google pesa ~0,5 MB y decenas de peticiones: lo cargamos recién
+    // cuando el invitado se acerca a él, para no frenar la apertura de la página.
+    const cargarMapa = () => {
+      if (mapaCargado) return;
+      mapaCargado = true;
+      frame.src = urlEmbed(lugares[0]);
+    };
+    if ('IntersectionObserver' in window) {
+      const ioMapa = new IntersectionObserver((entradas) => {
+        if (entradas.some(en => en.isIntersecting)) { cargarMapa(); ioMapa.disconnect(); }
+      }, { rootMargin: '400px 0px' });
+      ioMapa.observe($('#mapaWrap'));
+    } else {
+      cargarMapa();
+    }
   }
 
   /* ------------------------------------------------------- Itinerario */
@@ -420,7 +436,7 @@
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visto'); io.unobserve(en.target); } });
-    }, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+    }, { threshold: .01, rootMargin: '0px 0px 8% 0px' });
     reveals.forEach(el => io.observe(el));
   } else {
     reveals.forEach(el => el.classList.add('visto'));
@@ -429,10 +445,10 @@
   /* ---------------------------------------------------------------- Nav */
   const nav = $('#nav');
   const hero = $('#inicio');
-  const actualizarNav = () => {
-    const limite = hero.offsetHeight - 120;
-    nav.classList.toggle('ver', window.scrollY > limite);
-  };
+  let limiteNav = 0;
+  const actualizarNav = () => nav.classList.toggle('ver', window.scrollY > limiteNav);
+  const medirNav = () => { limiteNav = hero.offsetHeight - 120; actualizarNav(); };
   window.addEventListener('scroll', actualizarNav, { passive: true });
-  actualizarNav();
+  window.addEventListener('resize', medirNav, { passive: true });
+  medirNav();
 })();
