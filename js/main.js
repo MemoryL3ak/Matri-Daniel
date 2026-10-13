@@ -296,24 +296,44 @@
     setTxt('rsvpTexto', rs.texto);
     setTxt('rsvpLabel', rs.etiquetaNombre || 'Tu nombre');
 
-    const form   = $('#rsvpForm');
-    const input  = $('#rsvpNombre');
-    const estado = $('#rsvpEstado');
-    const btn    = $('#btnEnviar');
-    const btnTxt = $('#btnEnviarTxt');
-    const exito  = $('#rsvpExito');
-    const CLAVE  = 'boda-confirmacion';
+    const form        = $('#rsvpForm');
+    const input       = $('#rsvpNombre');
+    const estado      = $('#rsvpEstado');
+    const exito       = $('#rsvpExito');
+    const exitoEstado = $('#rsvpExitoEstado');
+    const btnOtra     = $('#btnOtra');
+    const CLAVE       = 'boda-confirmacion';
     if (rs.placeholder) input.placeholder = rs.placeholder;
 
     const mostrarEstado = (msg, esError = false) => {
       estado.textContent = msg;
       estado.classList.toggle('error', esError);
     };
-    const mostrarExito = (nombre) => {
+    const mostrarExito = (nombre, guardando = false) => {
       form.hidden = true;
       exito.hidden = false;
       $('#rsvpExitoTxt').textContent = (rs.exito || '¡Gracias, {nombre}!').replace('{nombre}', nombre);
+      exitoEstado.textContent = guardando ? 'Guardando tu confirmación…' : '';
+      exitoEstado.hidden = !guardando;
+      btnOtra.disabled = guardando;
     };
+
+    // Apps Script "duerme" cuando nadie lo usa y su primera respuesta tarda varios
+    // segundos. Lo despertamos con un GET en cuanto el invitado llega al formulario,
+    // así cuando pulse enviar el receptor ya está listo.
+    let despierto = false;
+    const despertar = () => {
+      if (despierto || !rs.endpoint) return;
+      despierto = true;
+      fetch(rs.endpoint, { cache: 'no-store', keepalive: true }).catch(() => {});
+    };
+    input.addEventListener('focus', despertar, { once: true });
+    if ('IntersectionObserver' in window) {
+      const ioRsvp = new IntersectionObserver((entradas) => {
+        if (entradas.some(en => en.isIntersecting)) { despertar(); ioRsvp.disconnect(); }
+      }, { rootMargin: '300px' });
+      ioRsvp.observe($('#confirmar'));
+    }
 
     // Si ya confirmó desde este dispositivo, mostramos el estado confirmado
     try {
@@ -321,7 +341,7 @@
       if (previo && previo.nombre) mostrarExito(previo.nombre);
     } catch (_) { /* sin almacenamiento: no pasa nada */ }
 
-    $('#btnOtra').addEventListener('click', () => {
+    btnOtra.addEventListener('click', () => {
       exito.hidden = true;
       form.hidden = false;
       input.value = '';
@@ -345,11 +365,12 @@
         return;
       }
 
-      btn.disabled = true;
-      btnTxt.textContent = 'Enviando…';
+      // Mostramos el agradecimiento de inmediato y guardamos en segundo plano:
+      // el invitado no espera a Google. Si falla, volvemos al formulario con aviso.
       mostrarEstado('');
+      mostrarExito(nombre, true);
       const ctrl = new AbortController();
-      const limite = setTimeout(() => ctrl.abort(), 15000);
+      const limite = setTimeout(() => ctrl.abort(), 20000);
       try {
         // Cuerpo como texto plano: evita el preflight CORS y Apps Script lo lee en e.postData.contents
         const r = await fetch(rs.endpoint, {
@@ -357,22 +378,24 @@
           body: JSON.stringify({
             nombre,
             empresa: $('#rsvpHp').value,          // campo trampa; debe llegar vacío
-            origen: location.hostname,
-            agente: navigator.userAgent.slice(0, 120),
           }),
+          keepalive: true,                        // termina aunque el invitado cierre la pestaña
           signal: ctrl.signal,
         });
         const data = await r.json().catch(() => ({ ok: r.ok }));
         if (!r.ok || data.ok === false) throw new Error(data.error || `HTTP ${r.status}`);
         try { localStorage.setItem(CLAVE, JSON.stringify({ nombre, fecha: new Date().toISOString() })); } catch (_) {}
-        mostrarExito(nombre);
+        exitoEstado.textContent = 'Confirmación guardada ✓';
+        btnOtra.disabled = false;
       } catch (err) {
         console.error('Confirmación fallida:', err);
+        exito.hidden = true;
+        form.hidden = false;
+        input.value = nombre;
+        btnOtra.disabled = false;
         mostrarEstado('No pudimos registrar tu confirmación. Revisa tu conexión e inténtalo de nuevo.', true);
       } finally {
         clearTimeout(limite);
-        btn.disabled = false;
-        btnTxt.textContent = 'Enviar confirmación';
       }
     });
 

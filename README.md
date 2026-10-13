@@ -26,11 +26,20 @@ Todo el contenido vive en **`js/config.js`**. No hay que tocar el HTML para camb
 ## Confirmaciones en Google Sheets
 
 El formulario envía el nombre a una pequeña aplicación web de Google Apps Script que vive
-dentro de tu propia planilla. No necesita claves, servidores ni costo. Configuración (una sola vez):
+dentro de tu propia planilla. No necesita claves, servidores ni costo.
 
-1. Crea un Google Sheet nuevo, por ejemplo **"Confirmaciones matrimonio"**.
+Planilla de confirmaciones:
+<https://docs.google.com/spreadsheets/d/1anfGP-TPqsR7KoyffS252epXb-ps6txWp3cFjpom8t0/edit>
+(su ID ya está en `ID_PLANILLA` dentro de `Codigo.gs`; si algún día usas otra planilla, cámbialo ahí).
+
+Configuración (una sola vez, con la cuenta de Google dueña de la planilla):
+
+1. Abre la planilla con el enlace de arriba.
 2. En la planilla ve a **Extensiones → Apps Script**. Borra el contenido del editor y pega
    el código de [`google-apps-script/Codigo.gs`](google-apps-script/Codigo.gs). Guarda (icono de disquete).
+   - Opcional: en la barra superior elige la función `probarEscritura` y pulsa **Ejecutar**.
+     Google pedirá autorización (acepta "ir a proyecto no verificado"; es tu propio script) y
+     aparecerá una fila de prueba en la pestaña **Confirmaciones**, que puedes borrar después.
 3. Arriba a la derecha: **Implementar → Nueva implementación**.
    - Tipo (engranaje): **Aplicación web**.
    - Ejecutar como: **Yo**.
@@ -44,7 +53,8 @@ dentro de tu propia planilla. No necesita claves, servidores ni costo. Configura
    ```
 
 5. Vuelve a desplegar el sitio (`vercel --prod`). Cada confirmación aparece como una fila nueva
-   en la hoja **Confirmaciones** con fecha, nombre, dominio de origen y navegador.
+   en la pestaña **Confirmaciones** con la fecha y el nombre.
+   La pestaña se crea sola en el primer envío (si la "Hoja 1" está vacía, se renombra en vez de crear otra).
 
 Para probar que el receptor está activo, abre la URL `/exec` en el navegador: debe responder
 `{"ok":true,"mensaje":"Receptor de confirmaciones activo"}`.
@@ -57,6 +67,10 @@ Detalles del formulario:
 - Valida que el nombre tenga al menos 3 letras y muestra estados de envío, éxito y error.
 - Incluye un campo trampa invisible para bots; si llega lleno, el script ignora el envío.
 - Recuerda en el navegador del invitado que ya confirmó, y le ofrece "Confirmar a otra persona".
+- Muestra el agradecimiento al instante y guarda en segundo plano; si el guardado falla, vuelve
+  al formulario con el nombre escrito y un aviso para reintentar.
+- Apps Script tarda varios segundos en responder la primera vez tras estar inactivo, así que la
+  página lo "despierta" con una petición GET cuando el invitado llega a la sección de confirmación.
 
 ## Paleta y tipografías
 
