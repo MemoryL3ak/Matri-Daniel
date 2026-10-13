@@ -84,9 +84,14 @@ window.BODA = {
   confirmacion: {
     activo: true,
     fechaLimite: "2027-02-20",             // AAAA-MM-DD
-    whatsapp: "56912345678",               // código país + número, sin + ni espacios
-    mensaje: "¡Hola! Confirmo mi asistencia al matrimonio de Daniel y Macarena. Mi nombre es: ",
-    texto: "Nos ayudaría mucho saber si puedes acompañarnos. Confirma tu asistencia por WhatsApp antes de la fecha límite.",
+    // URL de la aplicación web de Google Apps Script que escribe en tu Google Sheet.
+    // Sigue los pasos de README.md ("Confirmaciones en Google Sheets"). Termina en /exec.
+    // Mientras esté vacía, el formulario avisará que aún no está conectado.
+    endpoint: "",
+    texto: "Nos ayudaría mucho saber si puedes acompañarnos. Escribe tu nombre y envía tu confirmación antes de la fecha límite.",
+    etiquetaNombre: "Tu nombre y apellido",
+    placeholder: "Ej: María José Soto",
+    exito: "¡Gracias, {nombre}! Tu confirmación quedó registrada. Nos vemos en el gran día.",
   },
 
   /* ---------------------------------------------------------------- Pie */
