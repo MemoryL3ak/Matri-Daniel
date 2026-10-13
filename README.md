@@ -97,3 +97,7 @@ vercel --prod         # deploy a producción
 ```
 
 No requiere configuración de framework: Vercel sirve los archivos estáticos tal cual.
+
+El CSS y el JavaScript se publican sin caché larga (`vercel.json`), así que cada visita recibe
+la última versión. Los enlaces en `index.html` llevan `?v=...`: si cambias algo importante,
+sube ese número para forzar la descarga en navegadores que tengan una copia antigua.
