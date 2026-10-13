@@ -267,7 +267,7 @@ ul, ol { margin: 0; padding: 0; }
   gap: .05em;
   font-family: var(--f-display);
   font-weight: 300;
-  font-size: clamp(3rem, 11vw, 7rem);
+  font-size: clamp(2.3rem, 11vw, 7rem);
   letter-spacing: .12em;
   text-transform: uppercase;
   line-height: 1.02;
@@ -981,4 +981,21 @@ ul, ol { margin: 0; padding: 0; }
   .anim, .reveal { opacity: 1; transform: none; animation: none; transition: none; }
   .hero__scroll svg { animation: none; }
   .btn:hover { transform: none; }
+}
+
+/* ------------------------------------------- Ajustes finos para teléfonos */
+@media (max-width: 640px) {
+  /* Botones pequeños con área táctil cómoda (mínimo 44px) */
+  .btn--mini { min-height: 44px; padding: .75rem 1.3rem; }
+  /* Etiquetas en mayúsculas un punto más grandes para leer en pantalla chica */
+  .cuenta__lbl, .dress__sub, .campo__lbl, .dato__k { font-size: .74rem; }
+  /* La línea del itinerario termina en el último icono y no sigue bajo el texto */
+  .hito:last-child { position: relative; }
+  .hito:last-child::after {
+    content: "";
+    position: absolute;
+    left: 27px; width: 10px;
+    top: 64px; bottom: -6px;
+    background: var(--marfil-2);
+  }
 }
