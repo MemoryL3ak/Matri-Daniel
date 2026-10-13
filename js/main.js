@@ -294,13 +294,88 @@
     $$('[data-seccion="confirmacion"]').forEach(el => el.hidden = true);
   } else {
     setTxt('rsvpTexto', rs.texto);
-    const num = String(rs.whatsapp || '').replace(/\D/g, '');
-    const wa = $('#btnWhatsapp');
-    if (num) {
-      wa.href = `https://wa.me/${num}?text=${encodeURIComponent(rs.mensaje || '')}`;
-    } else {
-      wa.hidden = true;
-    }
+    setTxt('rsvpLabel', rs.etiquetaNombre || 'Tu nombre');
+
+    const form   = $('#rsvpForm');
+    const input  = $('#rsvpNombre');
+    const estado = $('#rsvpEstado');
+    const btn    = $('#btnEnviar');
+    const btnTxt = $('#btnEnviarTxt');
+    const exito  = $('#rsvpExito');
+    const CLAVE  = 'boda-confirmacion';
+    if (rs.placeholder) input.placeholder = rs.placeholder;
+
+    const mostrarEstado = (msg, esError = false) => {
+      estado.textContent = msg;
+      estado.classList.toggle('error', esError);
+    };
+    const mostrarExito = (nombre) => {
+      form.hidden = true;
+      exito.hidden = false;
+      $('#rsvpExitoTxt').textContent = (rs.exito || '¡Gracias, {nombre}!').replace('{nombre}', nombre);
+    };
+
+    // Si ya confirmó desde este dispositivo, mostramos el estado confirmado
+    try {
+      const previo = JSON.parse(localStorage.getItem(CLAVE) || 'null');
+      if (previo && previo.nombre) mostrarExito(previo.nombre);
+    } catch (_) { /* sin almacenamiento: no pasa nada */ }
+
+    $('#btnOtra').addEventListener('click', () => {
+      exito.hidden = true;
+      form.hidden = false;
+      input.value = '';
+      mostrarEstado('');
+      input.focus();
+    });
+
+    input.addEventListener('input', () => { input.removeAttribute('aria-invalid'); mostrarEstado(''); });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nombre = input.value.trim().replace(/\s+/g, ' ');
+      if (nombre.length < 3) {
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+        mostrarEstado('Escribe tu nombre completo, por favor.', true);
+        return;
+      }
+      if (!rs.endpoint) {
+        mostrarEstado('El formulario aún no está conectado. Avísanos por otro medio, por favor.', true);
+        return;
+      }
+
+      btn.disabled = true;
+      btnTxt.textContent = 'Enviando…';
+      mostrarEstado('');
+      const ctrl = new AbortController();
+      const limite = setTimeout(() => ctrl.abort(), 15000);
+      try {
+        // Cuerpo como texto plano: evita el preflight CORS y Apps Script lo lee en e.postData.contents
+        const r = await fetch(rs.endpoint, {
+          method: 'POST',
+          body: JSON.stringify({
+            nombre,
+            empresa: $('#rsvpHp').value,          // campo trampa; debe llegar vacío
+            origen: location.hostname,
+            agente: navigator.userAgent.slice(0, 120),
+          }),
+          signal: ctrl.signal,
+        });
+        const data = await r.json().catch(() => ({ ok: r.ok }));
+        if (!r.ok || data.ok === false) throw new Error(data.error || `HTTP ${r.status}`);
+        try { localStorage.setItem(CLAVE, JSON.stringify({ nombre, fecha: new Date().toISOString() })); } catch (_) {}
+        mostrarExito(nombre);
+      } catch (err) {
+        console.error('Confirmación fallida:', err);
+        mostrarEstado('No pudimos registrar tu confirmación. Revisa tu conexión e inténtalo de nuevo.', true);
+      } finally {
+        clearTimeout(limite);
+        btn.disabled = false;
+        btnTxt.textContent = 'Enviar confirmación';
+      }
+    });
+
     if (rs.fechaLimite) {
       const lim = new Date(`${rs.fechaLimite}T12:00:00`);
       const limTxt = Number.isNaN(lim.getTime()) ? rs.fechaLimite
