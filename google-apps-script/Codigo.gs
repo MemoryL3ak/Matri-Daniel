@@ -20,6 +20,8 @@
 var ID_PLANILLA = '1anfGP-TPqsR7KoyffS252epXb-ps6txWp3cFjpom8t0';
 var NOMBRE_HOJA = 'Confirmaciones';
 var ENCABEZADOS = ['Fecha', 'Nombre', 'Restricción alimentaria'];
+// Abre la URL /exec en el navegador: si muestra esta versión, la implementación está al día.
+var VERSION_RECEPTOR = '2026-10-18';
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -47,9 +49,10 @@ function doPost(e) {
   }
 }
 
-// Abrir la URL en el navegador sirve para comprobar que la implementación está activa.
+// Abrir la URL en el navegador sirve para comprobar que la implementación está activa
+// y qué versión del código está publicada.
 function doGet() {
-  return responder({ ok: true, mensaje: 'Receptor de confirmaciones activo' });
+  return responder({ ok: true, mensaje: 'Receptor de confirmaciones activo', version: VERSION_RECEPTOR });
 }
 
 function obtenerHoja() {

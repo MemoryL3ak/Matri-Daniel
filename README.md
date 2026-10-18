@@ -56,10 +56,12 @@ Configuración (una sola vez, con la cuenta de Google dueña de la planilla):
    La pestaña se crea sola en el primer envío (si la "Hoja 1" está vacía, se renombra en vez de crear otra).
 
 Para probar que el receptor está activo, abre la URL `/exec` en el navegador: debe responder
-`{"ok":true,"mensaje":"Receptor de confirmaciones activo"}`.
+`{"ok":true,"mensaje":"Receptor de confirmaciones activo","version":"..."}`, con la misma versión
+que `VERSION_RECEPTOR` en `Codigo.gs`. Si la versión no aparece o es otra, el código nuevo no está publicado.
 
-> Si más adelante modificas `Codigo.gs`, hay que publicar una **nueva versión**:
-> Implementar → Administrar implementaciones → lápiz → Versión: Nueva → Implementar. La URL no cambia.
+> Si más adelante modificas `Codigo.gs`, guardar no basta: hay que publicar una **nueva versión**
+> de la implementación existente: Implementar → Administrar implementaciones → lápiz → Versión: Nueva
+> → Implementar. La URL no cambia. No uses "Nueva implementación": crea otra URL que el sitio no usa.
 
 Detalles del formulario:
 
