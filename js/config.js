@@ -20,23 +20,22 @@ window.BODA = {
   // Formato: AAAA-MM-DDTHH:MM:SS seguido del desfase horario de Chile:
   //   -03:00  → horario de verano (septiembre a abril aprox.)
   //   -04:00  → horario de invierno (abril a septiembre aprox.)
-  fechaISO: "2026-12-26T17:00:00-03:00",   // ⚠ hora por confirmar
+  fechaISO: "2026-12-26T12:30:00-03:00",
   zonaHoraria: "America/Santiago",
-  duracionHoras: 8,               // para el evento de calendario (.ics / Google)
+  duracionHoras: 7.5,             // 12:30 a 20:00, para el evento de calendario (.ics / Google)
 
   /* ------------------------------------------------------ Texto de hero */
   preTitulo: "¡Nos casamos!",
-  frase: "Con la bendición de Dios y de nuestras familias, queremos compartir contigo el día más importante de nuestras vidas. Será un honor contar con tu presencia.",
 
   /* ------------------------------------------------------------ Lugares */
   // Si la ceremonia y la celebración son en el mismo lugar, deja
   // `celebracion: null` y se mostrará una sola tarjeta.
   ceremonia: {
     titulo: "Ceremonia y celebración",
-    hora: "17:00",                          // ⚠ hora por confirmar
+    hora: "12:30",
     lugar: "Centro de Eventos La Casita de Cuentos",
     direccion: "Los Guindos 1575, Parcela 25, Buin",
-    nota: "Te pedimos llegar 15 minutos antes para comenzar puntualmente. Hay estacionamiento dentro del recinto.",
+    nota: "Como nuestra ceremonia es civil, comenzará exactamente a la hora y no podremos esperar. ¡Te pedimos puntualidad para que no te la pierdas! Hay estacionamiento dentro del recinto.",
     // Opcional: pega aquí el enlace "Compartir" de Google Maps si quieres
     // apuntar a un punto exacto. Si lo dejas vacío se usa la dirección.
     mapsUrl: "",
@@ -47,11 +46,8 @@ window.BODA = {
   /* --------------------------------------------------------- Itinerario */
   // Iconos disponibles: anillos · copa · cena · musica · pin · reloj
   itinerario: [
-    // ⚠ Horas de referencia, por confirmar con los novios.
-    { hora: "17:00", titulo: "Ceremonia",          desc: "Nos damos el sí frente a quienes más queremos.", icono: "anillos" },
-    { hora: "18:00", titulo: "Cóctel",             desc: "Brindis de bienvenida en los jardines.",          icono: "copa" },
-    { hora: "20:00", titulo: "Cena",               desc: "Compartimos la mesa y los discursos.",            icono: "cena" },
-    { hora: "22:00", titulo: "Fiesta",             desc: "¡A bailar hasta que el cuerpo aguante!",         icono: "musica" },
+    { hora: "12:30", titulo: "Inicio",  desc: "Comienza la ceremonia civil, puntualmente.", icono: "anillos" },
+    { hora: "20:00", titulo: "Término", desc: "Cierre de la celebración.",                  icono: "reloj" },
   ],
 
   /* --------------------------------------------------------- Dress code */
@@ -65,13 +61,13 @@ window.BODA = {
   /* ------------------------------------------------------------- Regalo */
   regalo: {
     activo: true,
-    mensaje: "Tu presencia es nuestro mejor regalo. Pero si además deseas hacernos un presente, puedes hacerlo mediante una transferencia a la siguiente cuenta:",
-    titular: "Daniel Hidalgo",
-    rut: "18.360.825-8",
-    banco: "Banco Bci",
+    mensaje: "Tu presencia es nuestro mejor regalo. Si quieres sumar un detalle, te dejamos cómo hacerlo:",
+    titular: "Pamela Campos Contreras",
+    rut: "10.692.323-K",
+    banco: "Banco Santander",
     tipoCuenta: "Cuenta Corriente",
-    numeroCuenta: "61667161",
-    email: "dehidalgo@uc.cl",
+    numeroCuenta: "62387890",
+    email: "pame.campos1971@gmail.com",
     gracias: "¡Gracias de corazón por acompañarnos!",
   },
 
@@ -89,8 +85,14 @@ window.BODA = {
     etiquetaNombre: "Tu nombre y apellido",
     placeholder: "Ej: María José Soto",
     exito: "¡Gracias, {nombre}! Nos hace muy felices contar contigo. Nos vemos en el gran día.",
+    // Restricción alimentaria: el invitado puede marcar varias o ninguna.
+    // En la planilla quedan separadas por coma; si no marca nada queda "Ninguna".
+    etiquetaRestriccion: "Restricción alimentaria",
+    ayudaRestriccion: "¿Tienes alguna? Marca las que correspondan. Si no, déjalo en blanco.",
+    restricciones: ["Vegana", "Vegetariana", "Celíaca (sin gluten)", "Pescetariana"],
   },
 
   /* ---------------------------------------------------------------- Pie */
-  despedida: "Con amor, Daniel & Macarena",
+  // Frase final del pie de página. Vacía = no se muestra.
+  despedida: "",
 };

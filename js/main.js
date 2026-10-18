@@ -48,8 +48,6 @@
   setTxt('heroFecha', fechaLarga);
   setTxt('heroHora', B.ceremonia?.hora || B.celebracion?.hora || horaTxt);
   setTxt('heroLugar', B.ceremonia?.lugar || B.celebracion?.lugar || '');
-  setTxt('frase', B.frase);
-  setTxt('firma', B.titulo);
 
   /* ------------------------------------------------- Cuenta regresiva */
   const cd = {
@@ -342,6 +340,19 @@
     const CLAVE       = 'boda-confirmacion';
     if (rs.placeholder) input.placeholder = rs.placeholder;
 
+    // Restricción alimentaria: casillas generadas desde config.js
+    const restricciones = Array.isArray(rs.restricciones) ? rs.restricciones.filter(Boolean) : [];
+    if (restricciones.length === 0) {
+      $('#rsvpRestriccion').hidden = true;
+    } else {
+      setTxt('rsvpRestriccionLbl', rs.etiquetaRestriccion);
+      setTxt('rsvpRestriccionAyuda', rs.ayudaRestriccion);
+      $('#rsvpRestricciones').innerHTML = restricciones.map(r =>
+        `<label class="chip"><input type="checkbox" name="restriccion" value="${esc(r)}"><span>${esc(r)}</span></label>`
+      ).join('');
+    }
+    const casillasRestriccion = () => $$('input[name="restriccion"]', form);
+
     const mostrarEstado = (msg, esError = false) => {
       estado.textContent = msg;
       estado.classList.toggle('error', esError);
@@ -382,6 +393,7 @@
       exito.hidden = true;
       form.hidden = false;
       input.value = '';
+      casillasRestriccion().forEach(c => { c.checked = false; });
       mostrarEstado('');
       input.focus();
     });
@@ -414,6 +426,7 @@
           method: 'POST',
           body: JSON.stringify({
             nombre,
+            restriccion: casillasRestriccion().filter(c => c.checked).map(c => c.value).join(', ') || 'Ninguna',
             empresa: $('#rsvpHp').value,          // campo trampa; debe llegar vacío
           }),
           keepalive: true,                        // termina aunque el invitado cierre la pestaña
@@ -450,7 +463,8 @@
   $('#pieMono').innerHTML = `${esc(iniciales.charAt(0))}<span>&amp;</span>${esc(iniciales.charAt(2))}`;
   setTxt('pieFecha', fechaCorta);
   setTxt('pieHash', B.hashtag);
-  setTxt('pieDespedida', B.despedida);
+  const pieDesp = $('#pieDespedida');
+  if (B.despedida) pieDesp.textContent = B.despedida; else pieDesp.hidden = true;
 
   /* ------------------------------------------------- Aparición al scroll */
   const reveals = $$('.reveal');
