@@ -19,6 +19,7 @@
 // pero permite que también funcione como proyecto independiente en script.google.com.
 var ID_PLANILLA = '1anfGP-TPqsR7KoyffS252epXb-ps6txWp3cFjpom8t0';
 var NOMBRE_HOJA = 'Confirmaciones';
+var ENCABEZADOS = ['Fecha', 'Nombre', 'Restricción alimentaria'];
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -34,8 +35,10 @@ function doPost(e) {
     // Campo trampa: si viene lleno es un bot. Respondemos ok para no darle pistas.
     if (datos.empresa) return responder({ ok: true });
 
+    var restriccion = String(datos.restriccion || '').trim().replace(/\s+/g, ' ').slice(0, 200) || 'Ninguna';
+
     var hoja = obtenerHoja();
-    hoja.appendRow([new Date(), nombre]);
+    hoja.appendRow([new Date(), nombre, restriccion]);
     return responder({ ok: true });
   } catch (err) {
     return responder({ ok: false, error: String(err) });
@@ -60,11 +63,18 @@ function obtenerHoja() {
     hoja = vacia ? primera.setName(NOMBRE_HOJA) : libro.insertSheet(NOMBRE_HOJA);
   }
   if (hoja.getLastRow() === 0) {
-    hoja.appendRow(['Fecha', 'Nombre']);
+    hoja.appendRow(ENCABEZADOS);
     hoja.setFrozenRows(1);
     hoja.getRange('A:A').setNumberFormat('dd/MM/yyyy HH:mm');
     hoja.setColumnWidth(1, 150);
     hoja.setColumnWidth(2, 260);
+    hoja.setColumnWidth(3, 240);
+  } else if (hoja.getRange(1, 3).getValue() !== ENCABEZADOS[2]) {
+    // Planilla creada antes de sumar la restricción alimentaria: completa el encabezado
+    // y limpia el antiguo "Navegador" si todavía quedaba.
+    hoja.getRange(1, 1, 1, ENCABEZADOS.length).setValues([ENCABEZADOS]);
+    if (hoja.getRange(1, 4).getValue() === 'Navegador') hoja.getRange(1, 4).clearContent();
+    hoja.setColumnWidth(3, 240);
   }
   return hoja;
 }
@@ -74,7 +84,7 @@ function obtenerHoja() {
 // luego puedes borrar.
 function probarEscritura() {
   var hoja = obtenerHoja();
-  hoja.appendRow([new Date(), 'Prueba desde el editor']);
+  hoja.appendRow([new Date(), 'Prueba desde el editor', 'Ninguna']);
   Logger.log('Fila de prueba agregada en "%s" (ahora tiene %s filas)', hoja.getName(), hoja.getLastRow());
 }
 

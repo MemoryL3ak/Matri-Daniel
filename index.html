@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261013-2">
+  <link rel="stylesheet" href="css/styles.css?v=20261018-1">
 </head>
 <body>
 
@@ -156,15 +156,6 @@
       </div>
     </section>
 
-    <!-- ========================================================= Invitación -->
-    <section class="seccion invitacion" aria-label="Invitación">
-      <div class="contenedor contenedor--texto reveal">
-        <svg class="invitacion__ico" aria-hidden="true"><use href="#ico-anillos"/></svg>
-        <p class="invitacion__frase" id="frase"></p>
-        <p class="invitacion__firma" id="firma">Daniel &amp; Macarena</p>
-      </div>
-    </section>
-
     <!-- =========================================================== Detalles -->
     <section class="seccion detalles-sec" id="detalles">
       <div class="contenedor">
@@ -246,6 +237,11 @@
             <span class="campo__lbl" id="rsvpLabel">Tu nombre y apellido</span>
             <input class="campo__input" type="text" name="nombre" id="rsvpNombre" required maxlength="80" autocomplete="name" placeholder="Ej: María José Soto">
           </label>
+          <fieldset class="campo campo--opciones" id="rsvpRestriccion">
+            <legend class="campo__lbl" id="rsvpRestriccionLbl">Restricción alimentaria</legend>
+            <p class="campo__ayuda" id="rsvpRestriccionAyuda">¿Tienes alguna? Marca las que correspondan. Si no, déjalo en blanco.</p>
+            <div class="chips" id="rsvpRestricciones"></div>
+          </fieldset>
           <!-- Campo trampa para bots: los humanos no lo ven ni lo llenan -->
           <input type="text" name="empresa" id="rsvpHp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button class="btn btn--solido btn--grande" type="submit" id="btnEnviar">
@@ -295,7 +291,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/config.js?v=20261013-2"></script>
-  <script src="js/main.js?v=20261013-2"></script>
+  <script src="js/config.js?v=20261018-1"></script>
+  <script src="js/main.js?v=20261018-1"></script>
 </body>
 </html>

@@ -13,12 +13,11 @@ Todo el contenido vive en **`js/config.js`**. No hay que tocar el HTML para camb
 |---|---|
 | Nombres, título y hashtag | `novios`, `titulo`, `hashtag` |
 | Fecha y hora | `fechaISO` (formato `AAAA-MM-DDTHH:MM:SS-03:00`) |
-| Frase de invitación | `frase` |
 | Ceremonia / celebración (hora, lugar, dirección, nota) | `ceremonia`, `celebracion` (deja `celebracion: null` si es un solo lugar) |
 | Itinerario | `itinerario` (iconos: `anillos`, `copa`, `cena`, `musica`, `pin`, `reloj`) |
 | Dress code y paleta sugerida | `dressCode` |
 | Datos de transferencia | `regalo` (`activo: false` oculta la sección) |
-| Formulario de confirmación, fecha límite y URL del receptor | `confirmacion` (`activo: false` oculta la sección) |
+| Formulario de confirmación, fecha límite, opciones de restricción alimentaria y URL del receptor | `confirmacion` (`activo: false` oculta la sección) |
 
 > El desfase horario de Chile es `-03:00` en horario de verano y `-04:00` en invierno.
 > La página formatea la fecha automáticamente en español y calcula la cuenta regresiva.
@@ -53,7 +52,7 @@ Configuración (una sola vez, con la cuenta de Google dueña de la planilla):
    ```
 
 5. Vuelve a desplegar el sitio (`vercel --prod`). Cada confirmación aparece como una fila nueva
-   en la pestaña **Confirmaciones** con la fecha y el nombre.
+   en la pestaña **Confirmaciones** con la fecha, el nombre y la restricción alimentaria.
    La pestaña se crea sola en el primer envío (si la "Hoja 1" está vacía, se renombra en vez de crear otra).
 
 Para probar que el receptor está activo, abre la URL `/exec` en el navegador: debe responder
