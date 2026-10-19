@@ -735,6 +735,7 @@ ul, ol { margin: 0; padding: 0; }
 .chip input:checked + span { background: var(--verde); border-color: var(--verde); color: var(--marfil); }
 .chip input:checked + span::before { background: var(--oro-claro); border-color: var(--oro-claro); box-shadow: inset 0 0 0 3px var(--verde); }
 .chip input:focus-visible + span { outline: 2px solid var(--oro); outline-offset: 2px; }
+.campo__otra { margin-top: .75rem; }
 @media (hover: hover) { .chip:hover span { border-color: var(--oro); } }
 .btn[disabled] { opacity: .65; cursor: wait; transform: none; box-shadow: none; }
 .rsvp__estado {

@@ -33,6 +33,7 @@ window.BODA = {
   ceremonia: {
     titulo: "Ceremonia y celebración",
     hora: "12:30",
+    horaFin: "20:00",                       // opcional: la tarjeta muestra "12:30 – 20:00 hrs"
     lugar: "Centro de Eventos La Casita de Cuentos",
     direccion: "Los Guindos 1575, Parcela 25, Buin",
     nota: "Como nuestra ceremonia es civil, comenzará exactamente a la hora y no podremos esperar. ¡Te pedimos puntualidad para que no te la pierdas! Hay estacionamiento dentro del recinto.",
@@ -44,11 +45,10 @@ window.BODA = {
   celebracion: null,
 
   /* --------------------------------------------------------- Itinerario */
+  // Vacío = la sección y su enlace en la barra no se muestran.
+  // Formato: { hora: "12:30", titulo: "Ceremonia", desc: "...", icono: "anillos" }
   // Iconos disponibles: anillos · copa · cena · musica · pin · reloj
-  itinerario: [
-    { hora: "12:30", titulo: "Inicio",  desc: "Comienza la ceremonia civil, puntualmente.", icono: "anillos" },
-    { hora: "20:00", titulo: "Término", desc: "Cierre de la celebración.",                  icono: "reloj" },
-  ],
+  itinerario: [],
 
   /* --------------------------------------------------------- Dress code */
   dressCode: {
@@ -88,8 +88,11 @@ window.BODA = {
     // Restricción alimentaria: el invitado puede marcar varias o ninguna.
     // En la planilla quedan separadas por coma; si no marca nada queda "Ninguna".
     etiquetaRestriccion: "Restricción alimentaria",
-    ayudaRestriccion: "¿Tienes alguna? Marca las que correspondan. Si no, déjalo en blanco.",
-    restricciones: ["Vegana", "Vegetariana", "Celíaca (sin gluten)", "Pescetariana"],
+    ayudaRestriccion: "¿Tienes alguna? Marca las que correspondan. Si comes pescado pero no carne, elige Vegetariana. Si no tienes ninguna, déjalo en blanco.",
+    restricciones: ["Vegana", "Vegetariana", "Celíaca (sin gluten)"],
+    // Casilla "Otra" con un campo para escribir cuál. false = no se muestra.
+    otraRestriccion: true,
+    placeholderOtra: "¿Cuál? Ej: alergia a los frutos secos",
   },
 
   /* ---------------------------------------------------------------- Pie */
