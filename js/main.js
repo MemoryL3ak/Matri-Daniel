@@ -155,7 +155,7 @@
     <article class="tarjeta">
       <div class="tarjeta__ico"><svg><use href="#ico-${esc(l.icono)}"/></svg></div>
       <h3 class="tarjeta__h">${esc(l.titulo)}</h3>
-      <span class="tarjeta__hora"><svg><use href="#ico-reloj"/></svg>${esc(l.hora)} hrs</span>
+      <span class="tarjeta__hora"><svg><use href="#ico-reloj"/></svg>${esc(l.horaFin ? `${l.hora} – ${l.horaFin}` : l.hora)} hrs</span>
       <div class="tarjeta__sep" aria-hidden="true"></div>
       <p class="tarjeta__lugar">${esc(l.lugar)}</p>
       <p class="tarjeta__dir">${esc(l.direccion)}</p>
@@ -342,16 +342,34 @@
 
     // Restricción alimentaria: casillas generadas desde config.js
     const restricciones = Array.isArray(rs.restricciones) ? rs.restricciones.filter(Boolean) : [];
-    if (restricciones.length === 0) {
+    const conOtra = rs.otraRestriccion !== false;
+    const otraTxt = $('#rsvpOtraTxt');
+    if (restricciones.length === 0 && !conOtra) {
       $('#rsvpRestriccion').hidden = true;
     } else {
       setTxt('rsvpRestriccionLbl', rs.etiquetaRestriccion);
       setTxt('rsvpRestriccionAyuda', rs.ayudaRestriccion);
+      if (rs.placeholderOtra) otraTxt.placeholder = rs.placeholderOtra;
       $('#rsvpRestricciones').innerHTML = restricciones.map(r =>
         `<label class="chip"><input type="checkbox" name="restriccion" value="${esc(r)}"><span>${esc(r)}</span></label>`
-      ).join('');
+      ).join('') + (conOtra
+        ? '<label class="chip"><input type="checkbox" name="restriccion" value="Otra" id="rsvpOtraChk" aria-controls="rsvpOtraTxt"><span>Otra</span></label>'
+        : '');
     }
     const casillasRestriccion = () => $$('input[name="restriccion"]', form);
+    const otraChk = $('#rsvpOtraChk');
+    const mostrarOtra = (enfocar) => {
+      if (!otraChk) return;
+      otraTxt.hidden = !otraChk.checked;
+      if (!otraChk.checked) { otraTxt.value = ''; otraTxt.removeAttribute('aria-invalid'); }
+      else if (enfocar) otraTxt.focus();
+    };
+    otraChk?.addEventListener('change', () => { mostrarOtra(true); mostrarEstado(''); });
+    otraTxt.addEventListener('input', () => { otraTxt.removeAttribute('aria-invalid'); mostrarEstado(''); });
+    // Texto que se guarda en la planilla: "Vegana, Otra: alergia al maní" o "Ninguna"
+    const textoRestriccion = () => casillasRestriccion().filter(c => c.checked).map(c =>
+      c.value === 'Otra' ? `Otra: ${otraTxt.value.trim().replace(/\s+/g, ' ')}` : c.value
+    ).join(', ') || 'Ninguna';
 
     const mostrarEstado = (msg, esError = false) => {
       estado.textContent = msg;
@@ -394,6 +412,7 @@
       form.hidden = false;
       input.value = '';
       casillasRestriccion().forEach(c => { c.checked = false; });
+      mostrarOtra(false);
       mostrarEstado('');
       input.focus();
     });
@@ -407,6 +426,12 @@
         input.setAttribute('aria-invalid', 'true');
         input.focus();
         mostrarEstado('Escribe tu nombre completo, por favor.', true);
+        return;
+      }
+      if (otraChk?.checked && !otraTxt.value.trim()) {
+        otraTxt.setAttribute('aria-invalid', 'true');
+        otraTxt.focus();
+        mostrarEstado('Cuéntanos cuál es tu otra restricción alimentaria.', true);
         return;
       }
       if (!rs.endpoint) {
@@ -426,7 +451,7 @@
           method: 'POST',
           body: JSON.stringify({
             nombre,
-            restriccion: casillasRestriccion().filter(c => c.checked).map(c => c.value).join(', ') || 'Ninguna',
+            restriccion: textoRestriccion(),
             empresa: $('#rsvpHp').value,          // campo trampa; debe llegar vacío
           }),
           keepalive: true,                        // termina aunque el invitado cierre la pestaña
