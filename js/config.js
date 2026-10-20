@@ -58,10 +58,10 @@ window.BODA = {
   /* ------------------------------------------------------------- Regalo */
   regalo: {
     activo: true,
-    // Versión alternativa de la misma página SIN esta sección, para los invitados a
-    // quienes no se les quiere pedir regalo: https://matri-daniel.vercel.app/invitacion
-    // (la ruta también está declarada en vercel.json → rewrites). Vacía = sin versión alternativa.
-    rutaSinRegalo: "/invitacion",
+    // La sección de regalo SOLO aparece en esta dirección: https://matri-daniel.vercel.app/regalo
+    // (la ruta también está declarada en vercel.json → rewrites). En la dirección principal
+    // no se muestra. Vacía = se muestra en todas las direcciones.
+    rutaConRegalo: "/regalo",
     mensaje: "Tu presencia es nuestro mejor regalo. Si quieres sumar un detalle, te dejamos cómo hacerlo:",
     titular: "Pamela Campos Contreras",
     rut: "10.692.323-K",

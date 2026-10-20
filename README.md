@@ -91,14 +91,16 @@ npx serve .
 
 ## Dos direcciones, una sola página
 
-- `https://matri-daniel.vercel.app/` → invitación completa, con la sección de regalo.
-- `https://matri-daniel.vercel.app/invitacion` → la misma invitación **sin** la sección de regalo
-  (ni su enlace en la barra), para los invitados a quienes no se les quiere pedir regalo.
+- `https://matri-daniel.vercel.app/` → la invitación estándar, **sin** la sección de regalo
+  (ni su enlace en la barra).
+- `https://matri-daniel.vercel.app/regalo` → la misma invitación **con** la sección de regalo
+  y los datos de transferencia, para los invitados a quienes sí se les comparte.
+- `https://matri-daniel.vercel.app/invitacion` se mantiene como alias de la dirección estándar.
 
-Es el mismo `index.html`: `vercel.json` reescribe `/invitacion` a la raíz y `js/main.js` oculta
-la sección cuando la ruta coincide con `regalo.rutaSinRegalo` de `config.js`. Las confirmaciones
-de ambas direcciones llegan a la misma planilla. En local (`python -m http.server`) la ruta
-`/invitacion` no existe; se prueba en Vercel.
+Es el mismo `index.html`: `vercel.json` reescribe `/regalo` a la raíz y `js/main.js` muestra la
+sección solo cuando la ruta coincide con `regalo.rutaConRegalo` de `config.js`. Las confirmaciones
+de todas las direcciones llegan a la misma planilla. En local (`python -m http.server`) la ruta
+`/regalo` no existe; se prueba en Vercel.
 
 ## Desplegar en Vercel
 

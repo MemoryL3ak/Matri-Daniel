@@ -263,10 +263,12 @@
 
   const rg = B.regalo;
   const modal = $('#modalRegalo');
-  // En la ruta alternativa (p. ej. /invitacion) la página es idéntica pero sin la sección de regalo
+  // La sección de regalo solo se muestra en la ruta indicada (p. ej. /regalo); en el resto
+  // de direcciones la página es idéntica pero sin ella. Ruta vacía = se muestra siempre.
   const limpiarRuta = (r) => String(r || '').replace(/\/+$/, '').toLowerCase();
-  const sinRegalo = !!(rg && rg.rutaSinRegalo) && limpiarRuta(location.pathname) === limpiarRuta(rg.rutaSinRegalo);
-  if (!rg || rg.activo === false || sinRegalo) {
+  const rutaRegalo = rg ? limpiarRuta(rg.rutaConRegalo) : '';
+  const enRutaRegalo = !rutaRegalo || limpiarRuta(location.pathname) === rutaRegalo;
+  if (!rg || rg.activo === false || !enRutaRegalo) {
     $$('[data-seccion="regalo"]').forEach(el => el.hidden = true);
   } else {
     setTxt('regaloMensaje', rg.mensaje);

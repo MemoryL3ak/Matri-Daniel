@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/regalo", "destination": "/" },
     { "source": "/invitacion", "destination": "/" }
   ],
   "headers": [
