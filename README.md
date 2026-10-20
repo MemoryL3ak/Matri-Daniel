@@ -52,7 +52,8 @@ Configuración (una sola vez, con la cuenta de Google dueña de la planilla):
    ```
 
 5. Vuelve a desplegar el sitio (`vercel --prod`). Cada confirmación aparece como una fila nueva
-   en la pestaña **Confirmaciones** con la fecha, el nombre y la restricción alimentaria.
+   en la pestaña **Confirmaciones** con la fecha, el nombre, la restricción alimentaria y si asiste
+   (columna **Asiste**: "Sí" o "No"). Las filas anteriores a esa columna son confirmaciones.
    La pestaña se crea sola en el primer envío (si la "Hoja 1" está vacía, se renombra en vez de crear otra).
 
 Para probar que el receptor está activo, abre la URL `/exec` en el navegador: debe responder
@@ -66,6 +67,10 @@ que `VERSION_RECEPTOR` en `Codigo.gs`. Si la versión no aparece o es otra, el c
 Detalles del formulario:
 
 - Valida que el nombre tenga al menos 3 letras y muestra estados de envío, éxito y error.
+- El invitado indica si asiste o no ("Sí, asistiré" viene marcado). Si responde que no, se oculta la
+  restricción alimentaria, recibe otro mensaje de agradecimiento y en la planilla queda "No" en
+  **Asiste**. Si el script de Google aún fuera una versión anterior, igual se nota: la columna de
+  restricción dice "No asistirá".
 - Incluye un campo trampa invisible para bots; si llega lleno, el script ignora el envío.
 - Recuerda en el navegador del invitado que ya confirmó, y le ofrece "Confirmar a otra persona".
 - Muestra el agradecimiento al instante y guarda en segundo plano; si el guardado falla, vuelve

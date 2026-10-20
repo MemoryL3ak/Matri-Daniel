@@ -732,6 +732,7 @@ ul, ol { margin: 0; padding: 0; }
   border-radius: 4px;
   transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
+.chip input[type="radio"] + span::before { border-radius: 50%; }
 .chip input:checked + span { background: var(--verde); border-color: var(--verde); color: var(--marfil); }
 .chip input:checked + span::before { background: var(--oro-claro); border-color: var(--oro-claro); box-shadow: inset 0 0 0 3px var(--verde); }
 .chip input:focus-visible + span { outline: 2px solid var(--oro); outline-offset: 2px; }

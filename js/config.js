@@ -86,6 +86,12 @@ window.BODA = {
     etiquetaNombre: "Tu nombre y apellido",
     placeholder: "Ej: María José Soto",
     exito: "¡Gracias, {nombre}! Nos hace muy felices contar contigo. Nos vemos en el gran día.",
+    // Asistencia: el invitado indica si viene o no. "Sí" queda marcado por defecto.
+    etiquetaAsistencia: "¿Podrás acompañarnos?",
+    opcionSi: "Sí, asistiré",
+    opcionNo: "No podré asistir",
+    // Mensaje cuando responde que no viene (en la planilla queda "No" en la columna Asiste).
+    exitoNo: "Gracias por avisarnos, {nombre}. Te vamos a extrañar ese día.",
     // Restricción alimentaria: el invitado puede marcar varias o ninguna.
     // En la planilla quedan separadas por coma; si no marca nada queda "Ninguna".
     etiquetaRestriccion: "Restricción alimentaria",
