@@ -13,17 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
-  <script>
-    // Versión alternativa de colores ("Medianoche y champán") en /noche y /noche/regalo.
-    // Va en <head> para que no se vea ni un instante la paleta original. La ruta debe
-    // coincidir con vercel.json (rewrites) y con js/main.js (rutas del regalo).
-    if (/^\/noche(\/|$)/i.test(location.pathname)) {
-      document.documentElement.dataset.tema = 'noche';
-      document.querySelector('link[rel="icon"]').href = '/assets/favicon-noche.svg';
-      document.querySelector('meta[name="theme-color"]').content = '#14213D';
-    }
-  </script>
-  <link rel="stylesheet" href="/css/styles.css?v=20261020-5">
+  <link rel="stylesheet" href="/css/styles.css?v=20261020-4">
 </head>
 <body>
 
@@ -306,7 +296,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/js/config.js?v=20261020-5"></script>
-  <script src="/js/main.js?v=20261020-5"></script>
+  <script src="/js/config.js?v=20261020-4"></script>
+  <script src="/js/main.js?v=20261020-4"></script>
 </body>
 </html>
