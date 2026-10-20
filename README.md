@@ -89,6 +89,17 @@ npx serve .
 
 (o simplemente abre `index.html` en el navegador).
 
+## Dos direcciones, una sola página
+
+- `https://matri-daniel.vercel.app/` → invitación completa, con la sección de regalo.
+- `https://matri-daniel.vercel.app/invitacion` → la misma invitación **sin** la sección de regalo
+  (ni su enlace en la barra), para los invitados a quienes no se les quiere pedir regalo.
+
+Es el mismo `index.html`: `vercel.json` reescribe `/invitacion` a la raíz y `js/main.js` oculta
+la sección cuando la ruta coincide con `regalo.rutaSinRegalo` de `config.js`. Las confirmaciones
+de ambas direcciones llegan a la misma planilla. En local (`python -m http.server`) la ruta
+`/invitacion` no existe; se prueba en Vercel.
+
 ## Desplegar en Vercel
 
 ```bash

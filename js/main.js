@@ -263,7 +263,10 @@
 
   const rg = B.regalo;
   const modal = $('#modalRegalo');
-  if (!rg || rg.activo === false) {
+  // En la ruta alternativa (p. ej. /invitacion) la página es idéntica pero sin la sección de regalo
+  const limpiarRuta = (r) => String(r || '').replace(/\/+$/, '').toLowerCase();
+  const sinRegalo = !!(rg && rg.rutaSinRegalo) && limpiarRuta(location.pathname) === limpiarRuta(rg.rutaSinRegalo);
+  if (!rg || rg.activo === false || sinRegalo) {
     $$('[data-seccion="regalo"]').forEach(el => el.hidden = true);
   } else {
     setTxt('regaloMensaje', rg.mensaje);
