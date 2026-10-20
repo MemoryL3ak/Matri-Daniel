@@ -3,8 +3,8 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/regalo", "destination": "/" },
-    { "source": "/noche", "destination": "/" },
-    { "source": "/noche/regalo", "destination": "/" },
+    { "source": "/noche", "destination": "/noche.html" },
+    { "source": "/noche/regalo", "destination": "/noche.html" },
     { "source": "/invitacion", "destination": "/" }
   ],
   "headers": [
