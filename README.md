@@ -15,7 +15,7 @@ Todo el contenido vive en **`js/config.js`**. No hay que tocar el HTML para camb
 | Fecha y hora | `fechaISO` (formato `AAAA-MM-DDTHH:MM:SS-03:00`) |
 | Ceremonia / celebración (hora, lugar, dirección, nota) | `ceremonia`, `celebracion` (deja `celebracion: null` si es un solo lugar) |
 | Itinerario | `itinerario` (iconos: `anillos`, `copa`, `cena`, `musica`, `pin`, `reloj`) |
-| Dress code y paleta sugerida | `dressCode` |
+| Dress code y paleta sugerida | `dressCode` (`null` oculta la sección) |
 | Datos de transferencia | `regalo` (`activo: false` oculta la sección) |
 | Formulario de confirmación, fecha límite, opciones de restricción alimentaria y URL del receptor | `confirmacion` (`activo: false` oculta la sección) |
 
