@@ -345,12 +345,23 @@
     const CLAVE       = 'boda-confirmacion';
     if (rs.placeholder) input.placeholder = rs.placeholder;
 
+    // Asistencia: "Sí, asistiré" (por defecto) o "No podré asistir"
+    setTxt('rsvpAsistenciaLbl', rs.etiquetaAsistencia);
+    $('#rsvpAsiste').innerHTML = `
+      <label class="chip"><input type="radio" name="asiste" value="Sí" checked><span>${esc(rs.opcionSi || 'Sí, asistiré')}</span></label>
+      <label class="chip"><input type="radio" name="asiste" value="No"><span>${esc(rs.opcionNo || 'No podré asistir')}</span></label>`;
+    const btnTxt = $('#btnEnviarTxt');
+    const asiste = () => form.querySelector('input[name="asiste"]:checked')?.value !== 'No';
+    const marcarAsiste = (si) => { form.querySelector(`input[name="asiste"][value="${si ? 'Sí' : 'No'}"]`).checked = true; };
+
     // Restricción alimentaria: casillas generadas desde config.js
     const restricciones = Array.isArray(rs.restricciones) ? rs.restricciones.filter(Boolean) : [];
     const conOtra = rs.otraRestriccion !== false;
     const otraTxt = $('#rsvpOtraTxt');
-    if (restricciones.length === 0 && !conOtra) {
-      $('#rsvpRestriccion').hidden = true;
+    const bloqueRestriccion = $('#rsvpRestriccion');
+    const hayRestricciones = restricciones.length > 0 || conOtra;
+    if (!hayRestricciones) {
+      bloqueRestriccion.hidden = true;
     } else {
       setTxt('rsvpRestriccionLbl', rs.etiquetaRestriccion);
       setTxt('rsvpRestriccionAyuda', rs.ayudaRestriccion);
@@ -370,6 +381,12 @@
       else if (enfocar) otraTxt.focus();
     };
     otraChk?.addEventListener('change', () => { mostrarOtra(true); mostrarEstado(''); });
+    const aplicarAsistencia = () => {
+      const viene = asiste();
+      if (hayRestricciones) bloqueRestriccion.hidden = !viene;
+      btnTxt.textContent = viene ? 'Enviar confirmación' : 'Enviar respuesta';
+    };
+    $$('input[name="asiste"]', form).forEach(r => r.addEventListener('change', () => { aplicarAsistencia(); mostrarEstado(''); }));
     otraTxt.addEventListener('input', () => { otraTxt.removeAttribute('aria-invalid'); mostrarEstado(''); });
     // Texto que se guarda en la planilla: "Vegana, Otra: alergia al maní" o "Ninguna"
     const textoRestriccion = () => casillasRestriccion().filter(c => c.checked).map(c =>
@@ -380,11 +397,12 @@
       estado.textContent = msg;
       estado.classList.toggle('error', esError);
     };
-    const mostrarExito = (nombre, guardando = false) => {
+    const mostrarExito = (nombre, guardando = false, viene = true) => {
       form.hidden = true;
       exito.hidden = false;
-      $('#rsvpExitoTxt').textContent = (rs.exito || '¡Gracias, {nombre}!').replace('{nombre}', nombre);
-      exitoEstado.textContent = guardando ? 'Guardando tu confirmación…' : '';
+      const plantilla = viene ? (rs.exito || '¡Gracias, {nombre}!') : (rs.exitoNo || 'Gracias por avisarnos, {nombre}.');
+      $('#rsvpExitoTxt').textContent = plantilla.replace('{nombre}', nombre);
+      exitoEstado.textContent = guardando ? (viene ? 'Guardando tu confirmación…' : 'Guardando tu respuesta…') : '';
       exitoEstado.hidden = !guardando;
       btnOtra.disabled = guardando;
     };
@@ -409,15 +427,17 @@
     // Si ya confirmó desde este dispositivo, mostramos el estado confirmado
     try {
       const previo = JSON.parse(localStorage.getItem(CLAVE) || 'null');
-      if (previo && previo.nombre) mostrarExito(previo.nombre);
+      if (previo && previo.nombre) mostrarExito(previo.nombre, false, previo.asiste !== 'No');
     } catch (_) { /* sin almacenamiento: no pasa nada */ }
 
     btnOtra.addEventListener('click', () => {
       exito.hidden = true;
       form.hidden = false;
       input.value = '';
+      marcarAsiste(true);
       casillasRestriccion().forEach(c => { c.checked = false; });
       mostrarOtra(false);
+      aplicarAsistencia();
       mostrarEstado('');
       input.focus();
     });
@@ -433,7 +453,8 @@
         mostrarEstado('Escribe tu nombre completo, por favor.', true);
         return;
       }
-      if (otraChk?.checked && !otraTxt.value.trim()) {
+      const viene = asiste();
+      if (viene && otraChk?.checked && !otraTxt.value.trim()) {
         otraTxt.setAttribute('aria-invalid', 'true');
         otraTxt.focus();
         mostrarEstado('Cuéntanos cuál es tu otra restricción alimentaria.', true);
@@ -447,7 +468,7 @@
       // Mostramos el agradecimiento de inmediato y guardamos en segundo plano:
       // el invitado no espera a Google. Si falla, volvemos al formulario con aviso.
       mostrarEstado('');
-      mostrarExito(nombre, true);
+      mostrarExito(nombre, true, viene);
       const ctrl = new AbortController();
       const limite = setTimeout(() => ctrl.abort(), 20000);
       try {
@@ -456,7 +477,8 @@
           method: 'POST',
           body: JSON.stringify({
             nombre,
-            restriccion: textoRestriccion(),
+            asiste: viene ? 'Sí' : 'No',
+            restriccion: viene ? textoRestriccion() : 'No asistirá',
             empresa: $('#rsvpHp').value,          // campo trampa; debe llegar vacío
           }),
           keepalive: true,                        // termina aunque el invitado cierre la pestaña
@@ -464,8 +486,8 @@
         });
         const data = await r.json().catch(() => ({ ok: r.ok }));
         if (!r.ok || data.ok === false) throw new Error(data.error || `HTTP ${r.status}`);
-        try { localStorage.setItem(CLAVE, JSON.stringify({ nombre, fecha: new Date().toISOString() })); } catch (_) {}
-        exitoEstado.textContent = 'Confirmación guardada ✓';
+        try { localStorage.setItem(CLAVE, JSON.stringify({ nombre, asiste: viene ? 'Sí' : 'No', fecha: new Date().toISOString() })); } catch (_) {}
+        exitoEstado.textContent = viene ? 'Confirmación guardada ✓' : 'Respuesta guardada ✓';
         btnOtra.disabled = false;
       } catch (err) {
         console.error('Confirmación fallida:', err);
@@ -473,7 +495,7 @@
         form.hidden = false;
         input.value = nombre;
         btnOtra.disabled = false;
-        mostrarEstado('No pudimos registrar tu confirmación. Revisa tu conexión e inténtalo de nuevo.', true);
+        mostrarEstado('No pudimos registrar tu respuesta. Revisa tu conexión e inténtalo de nuevo.', true);
       } finally {
         clearTimeout(limite);
       }

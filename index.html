@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20261020-2">
+  <link rel="stylesheet" href="/css/styles.css?v=20261020-3">
 </head>
 <body>
 
@@ -237,6 +237,10 @@
             <span class="campo__lbl" id="rsvpLabel">Tu nombre y apellido</span>
             <input class="campo__input" type="text" name="nombre" id="rsvpNombre" required maxlength="80" autocomplete="name" placeholder="Ej: María José Soto">
           </label>
+          <fieldset class="campo campo--opciones" id="rsvpAsistencia">
+            <legend class="campo__lbl" id="rsvpAsistenciaLbl">¿Podrás acompañarnos?</legend>
+            <div class="chips" id="rsvpAsiste"></div>
+          </fieldset>
           <fieldset class="campo campo--opciones" id="rsvpRestriccion">
             <legend class="campo__lbl" id="rsvpRestriccionLbl">Restricción alimentaria</legend>
             <p class="campo__ayuda" id="rsvpRestriccionAyuda">¿Tienes alguna? Marca las que correspondan. Si no, déjalo en blanco.</p>
@@ -292,7 +296,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/js/config.js?v=20261020-2"></script>
-  <script src="/js/main.js?v=20261020-2"></script>
+  <script src="/js/config.js?v=20261020-3"></script>
+  <script src="/js/main.js?v=20261020-3"></script>
 </body>
 </html>

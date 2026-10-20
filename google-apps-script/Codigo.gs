@@ -19,9 +19,9 @@
 // pero permite que también funcione como proyecto independiente en script.google.com.
 var ID_PLANILLA = '1anfGP-TPqsR7KoyffS252epXb-ps6txWp3cFjpom8t0';
 var NOMBRE_HOJA = 'Confirmaciones';
-var ENCABEZADOS = ['Fecha', 'Nombre', 'Restricción alimentaria'];
+var ENCABEZADOS = ['Fecha', 'Nombre', 'Restricción alimentaria', 'Asiste'];
 // Abre la URL /exec en el navegador: si muestra esta versión, la implementación está al día.
-var VERSION_RECEPTOR = '2026-10-18';
+var VERSION_RECEPTOR = '2026-10-20';
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -37,10 +37,13 @@ function doPost(e) {
     // Campo trampa: si viene lleno es un bot. Respondemos ok para no darle pistas.
     if (datos.empresa) return responder({ ok: true });
 
-    var restriccion = String(datos.restriccion || '').trim().replace(/\s+/g, ' ').slice(0, 200) || 'Ninguna';
+    // Asiste: "Sí" (por defecto) o "No". Si no viene, la restricción no aplica.
+    var asiste = String(datos.asiste || '').trim().toLowerCase() === 'no' ? 'No' : 'Sí';
+    var restriccion = asiste === 'No' ? '—'
+      : (String(datos.restriccion || '').trim().replace(/\s+/g, ' ').slice(0, 200) || 'Ninguna');
 
     var hoja = obtenerHoja();
-    hoja.appendRow([new Date(), nombre, restriccion]);
+    hoja.appendRow([new Date(), nombre, restriccion, asiste]);
     return responder({ ok: true });
   } catch (err) {
     return responder({ ok: false, error: String(err) });
@@ -72,12 +75,18 @@ function obtenerHoja() {
     hoja.setColumnWidth(1, 150);
     hoja.setColumnWidth(2, 260);
     hoja.setColumnWidth(3, 240);
-  } else if (hoja.getRange(1, 3).getValue() !== ENCABEZADOS[2]) {
-    // Planilla creada antes de sumar la restricción alimentaria: completa el encabezado
-    // y limpia el antiguo "Navegador" si todavía quedaba.
-    hoja.getRange(1, 1, 1, ENCABEZADOS.length).setValues([ENCABEZADOS]);
-    if (hoja.getRange(1, 4).getValue() === 'Navegador') hoja.getRange(1, 4).clearContent();
-    hoja.setColumnWidth(3, 240);
+    hoja.setColumnWidth(4, 90);
+  } else {
+    // Planilla creada con una versión anterior: completa el encabezado (solo la fila 1,
+    // nunca los datos). Las filas antiguas sin columna "Asiste" son confirmaciones.
+    var actual = hoja.getRange(1, 1, 1, ENCABEZADOS.length).getValues()[0];
+    var distinto = false;
+    for (var i = 0; i < ENCABEZADOS.length; i++) if (actual[i] !== ENCABEZADOS[i]) distinto = true;
+    if (distinto) {
+      hoja.getRange(1, 1, 1, ENCABEZADOS.length).setValues([ENCABEZADOS]);
+      hoja.setColumnWidth(3, 240);
+      hoja.setColumnWidth(4, 90);
+    }
   }
   return hoja;
 }
@@ -87,7 +96,7 @@ function obtenerHoja() {
 // luego puedes borrar.
 function probarEscritura() {
   var hoja = obtenerHoja();
-  hoja.appendRow([new Date(), 'Prueba desde el editor', 'Ninguna']);
+  hoja.appendRow([new Date(), 'Prueba desde el editor', 'Ninguna', 'Sí']);
   Logger.log('Fila de prueba agregada en "%s" (ahora tiene %s filas)', hoja.getName(), hoja.getLastRow());
 }
 
