@@ -75,7 +75,7 @@ window.BODA = {
   /* ------------------------------------------------- Confirmación (RSVP) */
   confirmacion: {
     activo: true,
-    fechaLimite: "2026-12-05",             // AAAA-MM-DD · ⚠ por confirmar
+    fechaLimite: "2026-11-30",             // AAAA-MM-DD
     // URL de la aplicación web de Google Apps Script que escribe en tu Google Sheet.
     // Sigue los pasos de README.md ("Confirmaciones en Google Sheets"). Termina en /exec.
     // Mientras esté vacía, el formulario avisará que aún no está conectado.
