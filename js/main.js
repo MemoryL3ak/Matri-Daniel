@@ -267,7 +267,9 @@
   // de direcciones la página es idéntica pero sin ella. Ruta vacía = se muestra siempre.
   const limpiarRuta = (r) => String(r || '').replace(/\/+$/, '').toLowerCase();
   const rutaRegalo = rg ? limpiarRuta(rg.rutaConRegalo) : '';
-  const enRutaRegalo = !rutaRegalo || limpiarRuta(location.pathname) === rutaRegalo;
+  // El prefijo de la versión de colores alternativa (/noche) no cuenta: /noche/regalo también muestra el regalo
+  const rutaActual = limpiarRuta(location.pathname).replace(/^\/noche(?=\/|$)/, '');
+  const enRutaRegalo = !rutaRegalo || rutaActual === rutaRegalo;
   if (!rg || rg.activo === false || !enRutaRegalo) {
     $$('[data-seccion="regalo"]').forEach(el => el.hidden = true);
   } else {
