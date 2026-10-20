@@ -30,6 +30,10 @@
   --ancho: 1100px;
   --gutter: clamp(1rem, 4vw, 2rem);
   --sombra: 0 24px 60px -32px rgba(34, 58, 47, .45);
+  --sombra-btn: 0 12px 28px -14px rgba(34, 58, 47, .6);
+  --nav-fondo: rgba(246, 240, 230, .97);
+  --velo: rgba(18, 30, 24, .62);      /* fondo tras el modal */
+  --oro-medio: var(--oro);            /* letra script sobre fondo claro */
 }
 
 /* ------------------------------------------------------------ Base */
@@ -87,7 +91,7 @@ ul, ol { margin: 0; padding: 0; }
   background: var(--verde);
   color: var(--marfil);
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px -14px rgba(34, 58, 47, .6);
+  box-shadow: var(--sombra-btn);
   outline: none;
 }
 .btn--solido { background: var(--verde); color: var(--marfil); }
@@ -106,7 +110,7 @@ ul, ol { margin: 0; padding: 0; }
   display: block;
   font-family: var(--f-script);
   font-size: clamp(1.9rem, 4.5vw, 2.8rem);
-  color: var(--oro);
+  color: var(--oro-medio);
   line-height: 1;
 }
 .titulo__h {
@@ -145,7 +149,7 @@ ul, ol { margin: 0; padding: 0; }
   align-items: center;
   justify-content: space-between;
   padding: .8rem var(--gutter);
-  background: rgba(246, 240, 230, .97);
+  background: var(--nav-fondo);
   border-bottom: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   transform: translateY(-110%);
   transition: transform .45s cubic-bezier(.2, .7, .2, 1);
@@ -857,7 +861,7 @@ ul, ol { margin: 0; padding: 0; }
   overflow: visible;
 }
 .modal::backdrop {
-  background: rgba(18, 30, 24, .62);
+  background: var(--velo);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
@@ -1011,3 +1015,83 @@ ul, ol { margin: 0; padding: 0; }
     background: var(--marfil-2);
   }
 }
+
+/* ================================================================ Tema
+   "Medianoche y champán": versión alternativa de colores en /noche (y
+   /noche/regalo). Un script en <head> pone html[data-tema="noche"] según la
+   ruta; sin ese atributo no se aplica nada de lo que sigue, así que la
+   versión original queda intacta.
+   ===================================================================== */
+html[data-tema="noche"] {
+  --marfil:        #F7F3EB;
+  --marfil-2:      #EEE7DA;
+  --crema:         #FCFAF5;
+  --verde:         #14213D;   /* azul noche (ocupa el lugar del verde) */
+  --verde-2:       #1C2D52;
+  --verde-3:       #2A3F6E;
+  --salvia:        #A9B7CB;   /* azul empolvado */
+  --salvia-claro:  #CBD5E3;
+  --oro:           #C8A867;   /* champán */
+  --oro-claro:     #E7D5A9;
+  --oro-medio:     #9C7A3A;
+  --oro-oscuro:    #7E6636;
+  --rosa:          #D9B9A8;
+  --tinta:         #1B1A18;
+  --tinta-2:       #4E4A44;
+  --tinta-3:       #68635A;
+  --sombra: 0 24px 60px -32px rgba(20, 33, 61, .45);
+  --sombra-btn: 0 12px 28px -14px rgba(20, 33, 61, .55);
+  --nav-fondo: rgba(247, 243, 235, .97);
+  --velo: rgba(8, 14, 30, .66);
+}
+
+/* Inicio en azul noche */
+[data-tema="noche"] .hero {
+  background:
+    radial-gradient(ellipse 72% 58% at 50% 40%, color-mix(in srgb, var(--verde-3) 75%, transparent) 0%, transparent 72%),
+    linear-gradient(180deg, var(--verde-2) 0%, var(--verde) 55%, #0C1529 100%);
+  color: var(--marfil);
+}
+[data-tema="noche"] .hero__marco { border-color: color-mix(in srgb, var(--oro) 70%, transparent); }
+[data-tema="noche"] .hero__marco::before { border-color: color-mix(in srgb, var(--oro) 32%, transparent); }
+[data-tema="noche"] .hero__mono { color: color-mix(in srgb, var(--oro) 9%, transparent); }
+[data-tema="noche"] .hero .rama { color: color-mix(in srgb, var(--oro) 78%, transparent); }
+[data-tema="noche"] .hero__pre { color: var(--oro-claro); }
+[data-tema="noche"] .hero__nombres { color: var(--marfil); }
+[data-tema="noche"] .hero__amp { color: var(--oro); }
+[data-tema="noche"] .hero__fecha { color: var(--oro-claro); }
+[data-tema="noche"] .hero__hora { color: var(--salvia-claro); }
+[data-tema="noche"] .hero .btn { border-color: color-mix(in srgb, var(--oro-claro) 85%, transparent); color: var(--marfil); }
+[data-tema="noche"] .hero .btn:hover, [data-tema="noche"] .hero .btn:focus-visible {
+  background: var(--oro-claro);
+  border-color: var(--oro-claro);
+  color: var(--verde);
+  box-shadow: 0 14px 30px -14px rgba(0, 0, 0, .7);
+}
+[data-tema="noche"] .hero .btn--solido { background: var(--oro); border-color: var(--oro); color: var(--verde); }
+[data-tema="noche"] .hero .btn--solido:hover, [data-tema="noche"] .hero .btn--solido:focus-visible { background: var(--oro-claro); border-color: var(--oro-claro); color: var(--verde); }
+[data-tema="noche"] .hero__scroll { color: var(--oro-claro); border-color: color-mix(in srgb, var(--oro) 65%, transparent); }
+
+/* Cuenta regresiva en claro */
+[data-tema="noche"] .cuenta {
+  background: var(--marfil-2);
+  color: var(--verde);
+  border-top: 1px solid color-mix(in srgb, var(--oro) 45%, transparent);
+}
+[data-tema="noche"] .cuenta__anillo { color: color-mix(in srgb, var(--oro) 38%, transparent); }
+[data-tema="noche"] .cuenta__pre { color: var(--oro-medio); }
+[data-tema="noche"] .cuenta__item {
+  background: var(--crema);
+  border-color: color-mix(in srgb, var(--oro) 60%, transparent);
+  box-shadow: var(--sombra);
+}
+[data-tema="noche"] .cuenta__item::before { border-color: color-mix(in srgb, var(--oro) 30%, transparent); }
+[data-tema="noche"] .cuenta__num { color: var(--verde); }
+[data-tema="noche"] .cuenta__lbl { color: var(--tinta-3); }
+[data-tema="noche"] .cuenta__hoy { color: var(--oro-oscuro); }
+[data-tema="noche"] .cuenta .btn--oro { border-color: var(--oro); color: var(--oro-oscuro); }
+[data-tema="noche"] .cuenta .btn--oro:hover, [data-tema="noche"] .cuenta .btn--oro:focus-visible { background: var(--verde); border-color: var(--verde); color: var(--marfil); }
+
+/* Ramas doradas sobre los fondos oscuros */
+[data-tema="noche"] .rama--regalo { color: color-mix(in srgb, var(--oro) 42%, transparent); }
+[data-tema="noche"] .pie__rama { color: color-mix(in srgb, var(--oro) 36%, transparent); }

@@ -62,6 +62,8 @@ window.BODA = {
     // (la ruta también está declarada en vercel.json → rewrites). En la dirección principal
     // no se muestra. Vacía = se muestra en todas las direcciones.
     rutaConRegalo: "/regalo",
+    // Versión de colores alternativa ("Medianoche y champán"): /noche y /noche/regalo.
+    // Se define en index.html (<head>), vercel.json y css/styles.css (bloque "Tema").
     mensaje: "Tu presencia es nuestro mejor regalo. Si quieres sumar un detalle, te dejamos cómo hacerlo:",
     titular: "Pamela Campos Contreras",
     rut: "10.692.323-K",

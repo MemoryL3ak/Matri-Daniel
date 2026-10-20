@@ -101,6 +101,10 @@ npx serve .
 - `https://matri-daniel.vercel.app/regalo` → la misma invitación **con** la sección de regalo
   y los datos de transferencia, para los invitados a quienes sí se les comparte.
 - `https://matri-daniel.vercel.app/invitacion` se mantiene como alias de la dirección estándar.
+- `https://matri-daniel.vercel.app/noche` y `/noche/regalo` → las mismas dos versiones con la paleta
+  alternativa "Medianoche y champán" (azul noche, champán, marfil). La activa un script en `<head>`
+  que pone `data-tema="noche"` en `<html>`; los colores están al final de `css/styles.css`.
+  Para dejarla como paleta por defecto, basta con poner ese atributo fijo en `<html>`.
 
 Es el mismo `index.html`: `vercel.json` reescribe `/regalo` a la raíz y `js/main.js` muestra la
 sección solo cuando la ruta coincide con `regalo.rutaConRegalo` de `config.js`. Las confirmaciones
