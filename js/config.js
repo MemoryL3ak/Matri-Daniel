@@ -51,12 +51,9 @@ window.BODA = {
   itinerario: [],
 
   /* --------------------------------------------------------- Dress code */
-  dressCode: {
-    titulo: "Formal · Elegante",
-    detalle: "Queremos que te sientas cómodo y espléndido. La celebración será al aire libre, así que recomendamos tacos gruesos y un abrigo para la noche.",
-    coloresSugeridos: ["#223A2F", "#5B6E5A", "#8E7040", "#A86B5C", "#4A4F6B", "#2B2B2B"],
-    evitar: "Por favor evita el blanco, marfil y crema: están reservados para la novia.",
-  },
+  // null = la sección y su enlace en la barra no se muestran.
+  // Para mostrarla: { titulo: "...", detalle: "...", coloresSugeridos: ["#223A2F", ...], evitar: "..." }
+  dressCode: null,
 
   /* ------------------------------------------------------------- Regalo */
   regalo: {
