@@ -4,6 +4,7 @@
   "rewrites": [
     { "source": "/regalo", "destination": "/" },
     { "source": "/noche/regalo", "destination": "/noche" },
+    { "source": "/dia/regalo", "destination": "/dia" },
     { "source": "/invitacion", "destination": "/" }
   ],
   "headers": [

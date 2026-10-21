@@ -107,6 +107,11 @@ npx serve .
   en franja, bloque editorial de fecha, formulario con campos subrayados. Usa los mismos datos
   (`js/config.js`) y la misma lógica (`js/main.js`): conserva todos los ids que el script necesita.
   Para dejarla como versión principal, basta con intercambiar `noche.html` e `index.html`.
+- `https://matri-daniel.vercel.app/dia` y `/dia/regalo` → **versión "Día"**: la misma composición
+  y tipografías de "Noche" con paleta de mediodía (marfil, verde profundo, oro cálido, salvia) e
+  inicio claro con ramas. `dia.html` y `css/dia.css` se generan desde los archivos de "Noche" con
+  un script (`gen-dia.py`, en el historial de esta conversación): si cambias `noche.html` o
+  `css/noche.css`, regenera o replica el cambio a mano.
 
 Es el mismo `index.html`: `vercel.json` reescribe `/regalo` a la raíz y `js/main.js` muestra la
 sección solo cuando la ruta coincide con `regalo.rutaConRegalo` de `config.js`. Las confirmaciones
